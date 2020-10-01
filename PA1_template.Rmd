@@ -14,13 +14,42 @@ mytable <- read.table("activity.csv", header = TRUE, sep = ",", stringsAsFactors
 
 Here is a summary table
 ```{r mysummary, results='asis'}
-library(xtable)
-print(xtable(summary(mytable)),type = "html")
+library(knitr)
+kable(summary(mytable))
 ```
 
 
 ## What is mean total number of steps taken per day?
+I create a new dataframe variable without NA's
 
+```{r nona, echo=TRUE}
+nonna<-na.omit(mytable)
+kable(summary(nonna))
+```
+
+Using dplyr package I calculate the total number of steps per day
+
+```{r grouping, echo=TRUE}
+library(dplyr)
+
+mygroup<-group_by(nonna,nonna$date)
+steps_day<-summarise(mygroup,total=sum(steps), .groups= 'drop')
+steps_day
+
+hist(steps_day$total)
+
+```
+
+I calculate some basic measures of center
+
+```{r computeeda, echo=TRUE}
+
+mymean <- mean(steps_day$total)
+mymedian <- median(steps_day$total)
+
+```
+
+The mean of the total number of steps is `r mymean` and the median is `r mymedian`
 
 
 ## What is the average daily activity pattern?
