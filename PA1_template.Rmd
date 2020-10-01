@@ -33,8 +33,10 @@ Then a histogram is plotted
 ```{r groupingdate, echo=TRUE}
 library(dplyr)
 
-mygroup<-group_by(nonna,nonna$date)
-steps_day<-summarise(mygroup,total=sum(steps), .groups= 'drop')
+steps_day <- nonna %>% 
+  group_by(date) %>% 
+  summarise(total=sum(steps), .groups= 'drop')
+
 hist(steps_day$total,
      col = "peachpuff",
      border = "black",
@@ -57,13 +59,13 @@ The mean of the total number of steps is `r mymean` and the median is `r mymedia
 
 ## What is the average daily activity pattern?
 
-
-
 ```{r groupinginterval, echo=TRUE}
 
-myinterval<-group_by(nonna,nonna$interval)
-steps_daily<-summarise(myinterval,totalmean=mean(steps), .groups= 'drop')
-plot(steps_daily$`nonna$interval`, steps_daily$totalmean, type = "l")
+steps_daily <- nonna %>% 
+  group_by(interval) %>% 
+  summarise(totalmean=mean(steps), .groups= 'drop')
+
+plot(steps_daily$interval, steps_daily$totalmean, type = "l")
 
 ```
 
