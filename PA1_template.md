@@ -1,8 +1,8 @@
 ---
 title: "Reproducible Research: Peer Assessment 1"
 output: 
-  html_document:
-    keep_md: true
+  html_document: 
+    keep_md: yes
 ---
 
 
@@ -33,7 +33,7 @@ kable(summary(mytable))
 
 
 ## What is mean total number of steps taken per day?
-I create a new dataframe variable called nonna without NA's. Here is a summary table
+I create a new dataframe variable called nonna without NAs. Here is a summary table
 
 
 ```r
@@ -92,8 +92,7 @@ hist(steps_day$total,
 
 ![](PA1_template_files/figure-html/groupingdate-1.png)<!-- -->
 
-The mean and median are very close.
-
+Both measures are very close
 
 ```r
 mymean <- mean(steps_day$total)
