@@ -131,7 +131,6 @@ hist(steps_filled$total,
 ```
 
 
-
 ```{r computefilled, echo=TRUE}
 
 fillmymean <- mean(steps_filled$total)
@@ -143,3 +142,23 @@ The mean and the median in the imputed dataset are the same `r fillmymean` and `
 
 
 ## Are there differences in activity patterns between weekdays and weekends?
+
+```{r finde, echo=TRUE}
+
+cpytable$day<-c("Sunday", "Monday", "Tuesday", "Wednesday", "Thursday","Friday", "Saturday")[as.POSIXlt(cpytable$date)$wday + 1]
+
+cpytable$day[cpytable$day %in% c("Saturday", "Sunday")]<-"weekend"
+cpytable$day[cpytable$day != "weekend"] <- "weekday"
+wkd_table <- cpytable %>% filter(day == "weekday")
+wknd_table <- cpytable %>% filter(day == "weekend")
+
+steps_wkd <- wkd_table %>% 
+  group_by(interval) %>% 
+  summarise(mean_wkd=mean(steps), .groups= 'drop')
+
+steps_wknd <- wknd_table %>% 
+  group_by(interval) %>% 
+  summarise(mean_wknd=mean(steps), .groups= 'drop')
+
+
+```
