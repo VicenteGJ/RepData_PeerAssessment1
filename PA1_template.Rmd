@@ -90,11 +90,18 @@ The maximum average number of steps is `r maxmean` in the interval `r maxinterva
 ## Imputing missing values
 Get the total number of missing values in the dataset
 ```{r sumnas, echo=TRUE}
-
 count_nas <- sum(is.na(mytable))
 ```
 The total number of missing values is `r count_nas`.
 
+The imputation strategy chosen is the one based on the mean per day.
 
+```{r meanperday, echo=TRUE}
+meanvalues <-  nonna %>% 
+  group_by(date) %>% 
+  summarise(totalmean=mean(steps), .groups= 'drop')
+  idx <- which(is.na(mytable))
+meanvalues
+```
 
 ## Are there differences in activity patterns between weekdays and weekends?
