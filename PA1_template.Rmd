@@ -94,14 +94,52 @@ count_nas <- sum(is.na(mytable))
 ```
 The total number of missing values is `r count_nas`.
 
-The imputation strategy chosen is the one based on the mean per day.
+The imputation strategy chosen is the one based on the mean for that 5-minute interval
 
-```{r meanperday, echo=TRUE}
+```{r meanperinterval, echo=TRUE}
 meanvalues <-  nonna %>% 
-  group_by(date) %>% 
+  group_by(interval) %>% 
   summarise(totalmean=mean(steps), .groups= 'drop')
-  idx <- which(is.na(mytable))
-meanvalues
+idx <- which(is.na(mytable))
+cpytable <- mytable
+for (i in 1:length(idx)){
+    valueimputed<-meanvalues$totalmean[meanvalues$interval==cpytable$interval[idx[i]]]
+    cpytable$steps[idx[i]] <-valueimputed
+}
+
 ```
+
+
+Here is a summary of the filled dataset
+```{r summaryfilled, echo=TRUE}
+kable(summary(cpytable))
+```
+
+Here is the histogram from the filled dataset
+```{r histofilled, echo=TRUE}
+
+steps_filled <- cpytable %>% 
+  group_by(date) %>% 
+  summarise(total=sum(steps), .groups= 'drop')
+
+hist(steps_filled$total,
+     col = "peachpuff",
+     border = "black",
+     xlab = "Total number of steps per day",
+     main = "Histogram: Total Number of Steps per Day Filled Dataset")
+
+```
+
+
+
+```{r computefilled, echo=TRUE}
+
+fillmymean <- mean(steps_filled$total)
+fillmymedian <- median(steps_filled$total)
+
+```
+
+The mean and the median in the imputed dataset are the same `r fillmymean` and `r fillmymedian`, respectively. Compared against the original dataset (no NA's), the mean are the same (Original (No NA's)=`r mymean`, imputed = `r fillmymean`), but, the median is slightly different (Original (no NA's) = `r mymedian`, Imputed = `r fillmymedian`)
+
 
 ## Are there differences in activity patterns between weekdays and weekends?
