@@ -152,13 +152,16 @@ cpytable$day[cpytable$day != "weekend"] <- "weekday"
 wkd_table <- cpytable %>% filter(day == "weekday")
 wknd_table <- cpytable %>% filter(day == "weekend")
 
-steps_wkd <- wkd_table %>% 
-  group_by(interval) %>% 
-  summarise(mean_wkd=mean(steps), .groups= 'drop')
+cpytable <- aggregate(steps ~ interval + day, data=cpytable, mean)
 
-steps_wknd <- wknd_table %>% 
-  group_by(interval) %>% 
-  summarise(mean_wknd=mean(steps), .groups= 'drop')
+library(lattice)
+library(ggplot2)
+
+ggplot(cpytable, aes(interval, steps)) + 
+  geom_line() + 
+  facet_grid(day ~ .) +
+  xlab("Interval") + 
+  ylab("Number of Steps")+theme_bw()
 
 
 ```
